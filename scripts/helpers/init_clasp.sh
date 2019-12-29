@@ -74,7 +74,7 @@ generate_clasp_project_file() {
 }
 
 configure_appsscript_file() {
-  if ! grep -q '"access": "ANYONE"' appsscript.json
+  if ! grep -q '"access": "ANYONE"' appsscript.json 2>/dev/null
   then
     cat >appsscript.json <<appsscRIPT_FILE
   {
