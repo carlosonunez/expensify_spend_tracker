@@ -17,12 +17,10 @@ services:
     extends: clasp
     command:
       - create
-      - --type
-      - sheets
       - --title
       - "Expensify Integrations"
       - --parentId
-      - "$GOOGLE_SHEET_ID_TO_USE"
+      - "${GOOGLE_SHEET_ID_TO_USE}"
   pull:
     extends: clasp
     command:
