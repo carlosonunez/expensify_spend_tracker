@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+source ./scripts/helpers/debug.sh
+source ./scripts/helpers/init_clasp.sh
+source ./scripts/helpers/secrets.sh
+export $(egrep -v '^#' .env | xargs)
+turn_on_debugging
+
+GCP_PROJECT_ID="${GCP_PROJECT_ID?Please create a GCP_PROJECT_ID; \
+see --help for more info on this.}"
+GCP_PROJECT_NUMBER="${GCP_PROJECT_NUMBER?Please create a GCP_PROJECT_NUMBER; \
+see --help for more info on this.}"
+
+[ "$DEBUG" == "true" ] && set -x
+
+usage() {
+  cat <<-USAGE
+$(basename $0) [function_name]
+Runs a GAS project function.
+
+USAGE
+}
+
+push_to_clasp() {
+  docker-compose run --rm clasp uppush
+}
+
+run_function_with_clasp() {
+  docker-compose run --rm run $1
+}
+
+
+if [ "$1" == '--help' ]
+then
+  usage
+  exit 0
+fi
+
+initialize_clasp &&
+  push_to_clasp &&
+  set_project_secrets &&
+  run_function_with_clasp "$1"
+
+turn_off_debugging
