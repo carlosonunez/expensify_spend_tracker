@@ -1,12 +1,12 @@
 version: '2.2'
 services:
   clasp:
-    working_dir: /app
+    working_dir: /root
     env_file: .env
     build:
       context: .
     volumes:
-      - $PWD:/app
+      - $PWD:/root
     entrypoint: clasp
   login:
     extends: clasp
