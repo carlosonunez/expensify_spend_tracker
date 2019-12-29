@@ -6,12 +6,14 @@ services:
     build:
       context: .
     volumes:
-      - $PWD:/root
+      - $PWD:/root:delegated
     entrypoint: clasp
   login:
     extends: clasp
     command:
       - login
+      - --creds
+      - creds.json
       - --no-localhost
   create:
     extends: clasp
@@ -25,6 +27,10 @@ services:
     extends: clasp
     command:
       - pull
+  run:
+    extends: clasp
+    command:
+      - run
   deploy:
     extends: clasp
     entrypoint: sh

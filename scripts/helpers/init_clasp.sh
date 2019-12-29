@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 export $(egrep -v '^#' .env | xargs)
 
+REINITIALIZE="${REINITIALIZE:-false}"
 GCP_PROJECT_ID="${GCP_PROJECT_ID?Please create a GCP_PROJECT_ID; \
 see --help for more info on this.}"
 GCP_PROJECT_NUMBER="${GCP_PROJECT_NUMBER?Please create a GCP_PROJECT_NUMBER; \
@@ -96,7 +97,7 @@ login_to_clasp() {
 Run 'docker-compose run --rm clasp open creds' to get the URL that does this."
     exit 1
   fi
-  if ! check_for_login_file
+  if [ "$REINITIALIZE" == "true" ] || ! check_for_login_file
   then
     docker-compose run --rm login
   fi

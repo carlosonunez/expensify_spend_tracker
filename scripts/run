@@ -5,13 +5,6 @@ source ./scripts/helpers/secrets.sh
 export $(egrep -v '^#' .env | xargs)
 turn_on_debugging
 
-GCP_PROJECT_ID="${GCP_PROJECT_ID?Please create a GCP_PROJECT_ID; \
-see --help for more info on this.}"
-GCP_PROJECT_NUMBER="${GCP_PROJECT_NUMBER?Please create a GCP_PROJECT_NUMBER; \
-see --help for more info on this.}"
-
-[ "$DEBUG" == "true" ] && set -x
-
 usage() {
   cat <<-USAGE
 $(basename $0) [function_name]
@@ -21,11 +14,11 @@ USAGE
 }
 
 push_to_clasp() {
-  docker-compose run --rm clasp uppush
+  docker-compose run --rm clasp push
 }
 
 run_function_with_clasp() {
-  docker-compose run --rm run $1
+  docker-compose run --rm clasp run $1
 }
 
 
