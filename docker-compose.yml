@@ -1,20 +1,20 @@
 version: '2.2'
 services:
-  glasp:
+  clasp:
     working_dir: /app
     env_file: .env
     build:
       context: .
     volumes:
       - $PWD:/app
-    entrypoint: glasp
+    entrypoint: clasp
   login:
-    extends: glasp
+    extends: clasp
     command:
       - login
       - --no-localhost
   create:
-    extends: glasp
+    extends: clasp
     command:
       - create
       - --type
@@ -24,17 +24,17 @@ services:
       - --parentId
       - "$GOOGLE_SHEET_ID_TO_USE"
   pull:
-    extends: glasp
+    extends: clasp
     command:
       - pull
   deploy:
-    extends: glasp
+    extends: clasp
     entrypoint: sh
     command:
       - -c
       - "Run scripts/deploy.sh instead; add --help for options."
   execute:
-    extends: glasp
+    extends: clasp
     entrypoint: sh
     command:
       - -c
