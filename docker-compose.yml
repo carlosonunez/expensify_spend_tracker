@@ -1,0 +1,41 @@
+version: '2.2'
+services:
+  glasp:
+    working_dir: /app
+    env_file: .env
+    build:
+      context: .
+    volumes:
+      - $PWD:/app
+    entrypoint: glasp
+  login:
+    extends: glasp
+    command:
+      - login
+      - --no-localhost
+  create:
+    extends: glasp
+    command:
+      - create
+      - --type
+      - sheets
+      - --title
+      - "Expensify Integrations"
+      - --parentId
+      - "$GOOGLE_SHEET_ID_TO_USE"
+  pull:
+    extends: glasp
+    command:
+      - pull
+  deploy:
+    extends: glasp
+    entrypoint: sh
+    command:
+      - -c
+      - "Run scripts/deploy.sh instead; add --help for options."
+  execute:
+    extends: glasp
+    entrypoint: sh
+    command:
+      - -c
+      - "Run scripts/execute.sh instead; add --help for options."
