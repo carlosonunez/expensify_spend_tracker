@@ -43,3 +43,8 @@ services:
     command:
       - -c
       - "Run scripts/execute.sh instead; add --help for options."
+  tests:
+    extends: clasp
+    entrypoint: bats
+    command:
+      - 'tests/'
