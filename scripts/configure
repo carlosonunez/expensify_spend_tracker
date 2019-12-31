@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+CONFIG_FILE=.config.yml.tmpl
+
+check_for_config_file() {
+  test -f "$CONFIG_FILE"
+}
+
+get_configuration_json() {
+  gomplate -f "$CONFIG_FILE" | yq r -j -
+}
+
+update_project() {
+  clasp push
+}
+
+set_configuration() {
+  config_json=$(get_configuration_json)
+  clasp run setConfiguration -p "$config_json"
+}
+
+if ! check_for_config_file
+then
+  >&2 echo "ERROR: Config file not found."
+  exit 1
+fi
+
+update_project && set_configuration
