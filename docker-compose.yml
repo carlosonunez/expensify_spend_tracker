@@ -31,18 +31,11 @@ services:
     extends: clasp
     command:
       - run
-  deploy:
+  configure:
     extends: clasp
     entrypoint: sh
     command:
-      - -c
-      - "Run scripts/deploy.sh instead; add --help for options."
-  execute:
-    extends: clasp
-    entrypoint: sh
-    command:
-      - -c
-      - "Run scripts/execute.sh instead; add --help for options."
+      - "scripts/configure"
   tests:
     extends: clasp
     entrypoint: bats
