@@ -1,10 +1,10 @@
 function runExpensifyFunction(jobJson, jobType = "get", outputSettings = {},
-  onReceive = false, onFinish = {}, template = "") {
+  onReceive = false, onFinish = {}, template = "", additionalParams = {}) {
   var userId = getProperty("expensify_api_username")
   var secret = getProperty("expensify_api_secret_key")
   var url = getProperty("expensify_integrations_url")
   var jobDescription = generateRequestJobDescription(jobType,
-    userId, secret, jobJson, outputSettings, onReceive, onFinish)
+    userId, secret, jobJson, outputSettings, onReceive, onFinish, additionalParams)
   var payload = `requestJobDescription=${JSON.stringify(jobDescription)}`
   if (template != "") {
     payload = `${payload}&template=${encodeURI(template)}`
@@ -19,7 +19,8 @@ function runExpensifyFunction(jobJson, jobType = "get", outputSettings = {},
 }
 
 function generateRequestJobDescription(jobType, userId, secret,
-  input = {}, output = {}, onReceive = false, onFinish = {}) {
+  input = {}, output = {}, onReceive = false, onFinish = {},
+  additionalParams = {}) {
   var jobDescription = {
     "type": jobType,
     "credentials": {
@@ -32,6 +33,9 @@ function generateRequestJobDescription(jobType, userId, secret,
   };
   if (onReceive) {
     jobDescription.onReceive = { "immediateResponse":["returnRandomFileName"] }
+  }
+  for (const property in additionalParams) {
+    jobDescription[property] = additionalParams[property]
   }
   return jobDescription;
 }

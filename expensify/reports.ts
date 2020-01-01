@@ -1,3 +1,13 @@
+function getExpensesFromExpensify(startDate, limit = 0) {
+  var expenseReportName = getExpensifyReportsFileName(startDate, limit)
+  console.log("Filename generated: " + expenseReportName)
+  var additionalParameters = {
+    "fileName": expenseReportName
+  }
+  return runExpensifyFunction({}, "download", {}, false,
+    {}, "", additionalParameters).replace(/},]$/gi, '}]').replace("\\\:",":")
+}
+
 // This function can take several minutes to run given the # of expenses in
 // each report.
 function getExpensifyReportsFileName(startDate, limit = 0) {
@@ -7,7 +17,7 @@ function getExpensifyReportsFileName(startDate, limit = 0) {
     "filters": { "startDate": startDate }
   }
   if (limit > 0) {
-    job.filters.limit = limit
+    job.limit = limit
   }
   var outputs = {
     "fileExtension": "json",
@@ -16,20 +26,18 @@ function getExpensifyReportsFileName(startDate, limit = 0) {
   var template = `
 <#-- See this page for more info on how this works: -->
 <#-- https://integrations.expensify.com/Integration-Server/doc/export_report_template.html -->
-date,merchant,category,card,amount
+[<#t>
 <#list reports as report>
-  <#list report.transactionList as expense>
-    \${expense.created},<#t>
-    \${expense.merchant},<#t>
-    \${expense.category},<#t>
-    \${expense.tag},<#t>
-    \${expense.amount}<#lt>
+  <#list report.transactionList?take_while(expense -> expense.amount != 0) as expense>
+  {"dateIncurred":"\${expense.created}",<#t>
+    "merchant":"\${expense.merchant}",<#t>
+    "category":"\${expense.category}",<#t>
+    "tags":"\${expense.tag}",<#t>
+    "amountUSD":\${expense.amount / 100}},<#t>
   </#list>
 </#list>
+]<#t>
   `.trim()
-  var additionalOptions = {
-    "template": encodeURI(template)
-  }
   console.log("Generating expense report; please hang on.")
   if (limit > 0) {
     console.log(`Note that we are only fetching ${limit} expenses.`)
