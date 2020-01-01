@@ -21,6 +21,13 @@ Adding a new function is easy:
 3. Run your tests, ensure that they pass: `docker-compose run --rm test`
 4. Deploy: `docker-compose run --rm deploy`
 
+## Adding new scopes
+
+You may need to add new scopes for your function to work. If you need to do this:
+
+1. Add the scope to the "oauthScopes" section in `appsscript.json`
+2. Login again: `docker-compose run --rm login`
+
 # Adding a secret
 
 This project supports setting sensitive data to the script through its script properties.
