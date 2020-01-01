@@ -15,7 +15,8 @@ function runExpensifyFunction(jobJson, jobType = "get") {
   return response.getContentText()
 }
 
-function generateRequestJobDescription(jobType, userId, secret, input = {}, output = {}) {
+function generateRequestJobDescription(jobType, userId, secret,
+  input = {}, output = {}, onReceive = {}, onFinish = {}) {
   var jobDescription = {
     "type": jobType,
     "credentials": {
@@ -24,6 +25,8 @@ function generateRequestJobDescription(jobType, userId, secret, input = {}, outp
     },
     "inputSettings": input,
     "outputSettings": output,
+    "onReceive": onReceive,
+    "onFinish": onFinish
   };
   return jobDescription;
 }
