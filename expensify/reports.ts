@@ -4,8 +4,8 @@ function getExpensesFromExpensify(startDate, limit = 0) {
   var additionalParameters = {
     "fileName": expenseReportName
   }
-  return runExpensifyFunction({}, "download", {}, false,
-    {}, "", additionalParameters).replace(/},]$/gi, '}]').replace("\\\:",":")
+  return JSON.parse(runExpensifyFunction({}, "download", {}, false,
+    {}, "", additionalParameters).replace(/},]$/gi, '}]').replace("\\\:",":"))
 }
 
 // This function can take several minutes to run given the # of expenses in
