@@ -4,11 +4,12 @@ function setConfiguration(configJson) {
     return "Properties set."
   }
   catch(error) {
-    Logger.log("ERROR: Unable to set properties -- " + error)
+    console.log("ERROR: Unable to set properties -- " + error)
     return "Unable to set properties"
   }
 }
 
 function getProperty(key) {
+  console.log("Getting property: " + key)
   return PropertiesService.getScriptProperties().getProperty(key)
 }
