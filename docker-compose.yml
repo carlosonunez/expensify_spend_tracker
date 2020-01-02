@@ -27,6 +27,10 @@ services:
     extends: clasp
     command:
       - pull
+  push:
+    extends: clasp
+    command:
+      - push
   run:
     extends: clasp
     command:
@@ -35,6 +39,10 @@ services:
     extends: clasp
     command:
       - push
+  deploy:
+    extends: clasp
+    command:
+      - deploy
   configure:
     extends: clasp
     entrypoint: sh
