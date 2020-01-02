@@ -12,3 +12,9 @@ load clasp_helper
   run_function getCreditCardFromTag "\"$test_tag\""
   [[ "$output" == "Foo 1234" ]]
 }
+
+@test "Shows no card data when format is invalid" {
+  test_tag="Carlos"
+  run_function getCreditCardFromTag "\"$test_tag\""
+  [[ "$output" == "NO_CARD" ]]
+}
