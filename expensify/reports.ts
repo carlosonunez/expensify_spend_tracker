@@ -3,6 +3,8 @@
  * this logic into the Freemarker template that generates this JSON.
  * However, (a) Freeform is complicated, and
  * (b) the Expensify API is a bit fickle wrt rendering these templates.
+ * (It won't show you a backtrace from Freemarker; it will just say it couldn't
+ * render the template.)
  * */
 function fixExpensifyExpenses(expenses) {
   return expenses.replace(/\"\"texas rangers\" Sportservice/ig, '"Texas Rangers Sportservice"')
@@ -27,6 +29,10 @@ function getExpensesFromExpensify(startDate, limit = 0, debug = false) {
     return fixedExpenses
   }
   return JSON.parse(fixedExpenses)
+}
+
+function debugGetExpensesFromExpensify() {
+  return getExpensesFromExpensify('2016-01-01', 0, true)
 }
 
 // This function can take several minutes to run given the # of expenses in
