@@ -1,11 +1,31 @@
-function getExpensesFromExpensify(startDate, limit = 0) {
+/*
+ * I realize that there are large performance gains to be had by moving
+ * this logic into the Freemarker template that generates this JSON.
+ * However, (a) Freeform is complicated, and
+ * (b) the Expensify API is a bit fickle wrt rendering these templates.
+ * */
+function fixExpensifyExpenses(expenses) {
+  return expenses.replace(/\"\"texas rangers\" Sportservice/ig, '"Texas Rangers Sportservice"')
+    .replace(/\"\"texas rangers\"\"/ig, '"Texas Rangers"')
+    .replace('"Texas Rangers Sportservice""', '"Texas Rangers Sportservice"')
+    .replace(/\\\:/g, ':')
+    .replace(/},]$/gi, '}]')
+}
+
+function getExpensesFromExpensify(startDate, limit = 0, debug = false) {
   var expenseReportName = getExpensifyReportsFileName(startDate, limit)
   console.log("Filename generated: " + expenseReportName)
   var additionalParameters = {
     "fileName": expenseReportName
   }
-  return JSON.parse(runExpensifyFunction({}, "download", {}, false,
-    {}, "", additionalParameters).replace(/},]$/gi, '}]').replace("\\\:",":"))
+  var expenses = runExpensifyFunction({}, "download", {}, false,
+    {}, "", additionalParameters)
+  var fixedExpenses = fixExpensifyExpenses(expenses)
+  if (debug) {
+    console.log("Returning raw JSON for inspection.")
+    return fixedExpenses
+  }
+  return JSON.parse(fixedExpenses)
 }
 
 // This function can take several minutes to run given the # of expenses in
