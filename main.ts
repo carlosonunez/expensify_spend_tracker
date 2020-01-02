@@ -9,7 +9,7 @@ function getExpensifySheet() {
 
 function showExpensifyDataToast() {
   message = "Fetching Expensify data. This may take a few minutes."
-  SpreadsheetApp.getActiveSpreadsheet().toast(message, 'Refreshing...');
+  SpreadsheetApp.getActiveSpreadsheet().toast(message, 'Refreshing...', 240);
 }
 
 function clearExpensifyDataToast() {
@@ -51,11 +51,17 @@ function deleteSheet1IfPresent() {
   }
 }
 
+function sortByDate() {
+  getExpensifySheet().setFrozenRows(1)
+  getExpensifySheet().sort(1)
+}
+
 function onOpen() {
   showExpensifyDataToast()
   clearExpensifySheet()
   deleteSheet1IfPresent()
   writeHeader()
   getExpensesFromExpensify("2016-01-01").forEach(addExpense)
+  sortByDate()
   clearExpensifyDataToast()
 }
