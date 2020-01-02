@@ -9,7 +9,11 @@ function getExpensifySheet() {
 
 function showExpensifyDataToast() {
   message = "Fetching Expensify data. This may take a few minutes."
-  SpreadsheetApp.getActiveSpreadsheet().toast(message, 'Refreshing...', 10);
+  SpreadsheetApp.getActiveSpreadsheet().toast(message, 'Refreshing...');
+}
+
+function clearExpensifyDataToast() {
+  SpreadsheetApp.getActiveSpreadsheet().toast("Expensify data received!", "All done!", 1);
 }
 
 function clearExpensifySheet() {
@@ -53,4 +57,5 @@ function onOpen() {
   deleteSheet1IfPresent()
   writeHeader()
   getExpensesFromExpensify("2016-01-01").forEach(addExpense)
+  clearExpensifyDataToast()
 }

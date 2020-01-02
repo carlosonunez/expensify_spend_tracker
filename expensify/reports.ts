@@ -48,5 +48,5 @@ function getExpensifyReportsFileName(startDate, limit = 0) {
   if (limit > 0) {
     console.log(`Note that we are only fetching ${limit} expenses.`)
   }
-  return runExpensifyFunction(job, "file", outputs, true, {}, template)
+  return runExpensifyFunction(job, "file", outputs, true, {}, getExpensifyTemplate())
 }
