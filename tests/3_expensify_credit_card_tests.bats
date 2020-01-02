@@ -6,3 +6,9 @@ load clasp_helper
   run_function getCreditCardFromTag "\"$test_tag\""
   [[ "$output" == "Foo 1234" ]]
 }
+
+@test "Fetches credit card from v2 tagging format" {
+  test_tag="Credit:Foo 1234"
+  run_function getCreditCardFromTag "\"$test_tag\""
+  [[ "$output" == "Foo 1234" ]]
+}
