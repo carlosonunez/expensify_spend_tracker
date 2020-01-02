@@ -48,12 +48,22 @@ function getExpensifyReportsFileName(startDate, limit = 0) {
 <#-- https://integrations.expensify.com/Integration-Server/doc/export_report_template.html -->
 [<#t>
 <#list reports as report>
-  <#list report.transactionList?take_while(expense -> expense.amount != 0) as expense>
-  {"dateIncurred":"\${expense.created}",<#t>
-    "merchant":"\${expense.merchant}",<#t>
+  <#list report.transactionList as expense>
+  {"dateIncurred":"\${expense.inserted}",<#t>
+    <#if expense.modifiedMerchant != "">
+    "merchant":\${expense.modifiedMerchant},
+    <#else>
+    "merchant":\${expense.merchant},
+    </#if>
     "category":"\${expense.category}",<#t>
     "tags":"\${expense.tag}",<#t>
-    "amountUSD":\${expense.amount / 100}},<#t>
+    <#if expense.convertedAmount != 0>
+    "amountUSD":\${expense.convertedAmount / 100},
+    <#elseif expense.modifiedAmount != 0>
+    "amountUSD": \${expense.modifiedAmount / 100},
+    <#elseif expense.amount != 0>
+    "amountUSD": \${expense.amount / 100},
+    </#if>
   </#list>
 </#list>
 ]<#t>
