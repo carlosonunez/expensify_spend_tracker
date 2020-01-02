@@ -7,6 +7,7 @@
 function fixExpensifyExpenses(expenses) {
   return expenses.replace(/\"\"texas rangers\" Sportservice/ig, '"Texas Rangers Sportservice"')
     .replace(/\"\"texas rangers\"\"/ig, '"Texas Rangers"')
+    .replace(/pet supplies \"plus\"/ig, 'Pet Supplies Plus')
     .replace('"Texas Rangers Sportservice""', '"Texas Rangers Sportservice"')
     .replace(/\\\:/g, ':')
     .replace(/},]$/gi, '}]')
