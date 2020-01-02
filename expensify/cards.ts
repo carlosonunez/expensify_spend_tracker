@@ -1,9 +1,9 @@
 function getCreditCardFromTag(tag) {
   if (isV1Tag(tag) {
-    return tag.split(':').slice(-1)[0]
+    return tag.split(':').slice(-1)[0].trim()
   }
   else if (isV2Tag(tag) {
-    return tag.split(':').slice(-1)[0]
+    return tag.split(':').slice(-1)[0].trim()
   }
   else {
     return "NO_CARD"
@@ -11,13 +11,13 @@ function getCreditCardFromTag(tag) {
 }
 
 function isV1Tag(tag) {
-  if (tag.toLowerCase().match(/^[a-z]+:[a-z]+:[a-z]+ [0-9]+$/) != null) {
+  if (tag.toLowerCase().match(/^[a-z]+:[a-z]+: [a-z]+ [0-9]+$/) != null) {
     return true
   }
 }
 
 function isV2Tag(tag) {
-  if (tag.toLowerCase().match(/^[a-z]+:[a-z]+ [0-9]+$/) != null {
+  if (tag.toLowerCase().match(/^[a-z]+: [a-z]+ [0-9]+$/) != null {
     return true
   }
 }
