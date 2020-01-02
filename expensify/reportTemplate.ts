@@ -4,21 +4,23 @@ function getExpensifyTemplate() {
 <#-- https://integrations.expensify.com/Integration-Server/doc/export_report_template.html -->
 [<#t>
 <#list reports as report>
-  <#list report.transactionList as expense>
+  <#list report.transactionList?take_while(expense ->
+    (expense.amount != 0 || expense.convertedAmount != 0 || expense.modifiedAmount != 0))
+  as expense>
   {"dateIncurred":"\${expense.inserted}",<#t>
     <#if expense.modifiedMerchant != "">
-    "merchant":"\${expense.modifiedMerchant}",
+    "merchant":"\${expense.modifiedMerchant}",<#t>
     <#else>
-    "merchant":"\${expense.merchant}",
+    "merchant":"\${expense.merchant}",<#t>
     </#if>
     "category":"\${expense.category}",<#t>
     "tags":"\${expense.tag}",<#t>
     <#if expense.convertedAmount != 0>
-    "amountUSD":\${expense.convertedAmount / 100}},
+    "amountUSD":\${expense.convertedAmount / 100}},<#t>
     <#elseif expense.modifiedAmount != 0>
-    "amountUSD": \${expense.modifiedAmount / 100}},
-    <#elseif expense.amount != 0>
-    "amountUSD": \${expense.amount / 100}},
+    "amountUSD": \${expense.modifiedAmount / 100}},<#t>
+    <#else>
+    "amountUSD": \${expense.amount / 100}},<#t>
     </#if>
   </#list>
 </#list>
