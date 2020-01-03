@@ -1,3 +1,8 @@
+function getExpenseYear(dateString) {
+  // not the right way to do it, but the "right" way was failing me.
+  return dateString.split('-')[0]
+}
+
 function getExpensifySheetHeaders() {
   return [[ 'Date Incurred', 'Year', 'Merchant', 'Category', 'Card', 'Amount' ]]
 }
