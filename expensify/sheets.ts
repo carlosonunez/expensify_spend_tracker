@@ -10,7 +10,9 @@ function getExpensifySheetHeaders() {
             'Category',
             'Card',
             'Amount',
-            'Expense Report']]
+            'Expense Report',
+            'Reimbursed?',
+            'Budgeted?']]
 }
 
 function getExpensifySheetStartingColumn() {
@@ -60,7 +62,9 @@ function addExpense(expense, row) {
     expense.category,
     getCreditCardFromTag(expense.tags),
     expense.amountUSD,
-    expense.expenseReport
+    expense.expenseReport,
+    expense.reimbursed,
+    expense.budgeted
   ]]
   range.setValues(array)
 }

@@ -14,22 +14,27 @@ function getExpensifyTemplate() {
   <#list report.transactionList?take_while(expense ->
     (expense.amount != 0 || expense.convertedAmount != 0 || expense.modifiedAmount != 0))
   as expense>
-  {"dateIncurred":"\${expense.inserted}",<#t>
-    <#if expense.modifiedMerchant != "">
-    "merchant":"\${expense.modifiedMerchant}",<#t>
-    <#else>
-    "merchant":"\${expense.merchant}",<#t>
+    <#if (expense.reimbursable || expense.billable)>
+      <#continue>
     </#if>
-    "category":"\${expense.category}",<#t>
-    "tags":"\${expense.tag}",<#t>
-    <#if expense.convertedAmount != 0>
-    "amountUSD":\${expense.convertedAmount / 100},<#t>
-    <#elseif expense.modifiedAmount != 0>
-    "amountUSD": \${expense.modifiedAmount / 100},<#t>
-    <#else>
-    "amountUSD": \${expense.amount / 100},<#t>
-    </#if>
-    "expenseReport": "\${reportName}"},<#t>
+    {"dateIncurred":"\${expense.inserted}",<#t>
+      <#if expense.modifiedMerchant != "">
+      "merchant":"\${expense.modifiedMerchant}",<#t>
+      <#else>
+      "merchant":"\${expense.merchant}",<#t>
+      </#if>
+      "category":"\${expense.category}",<#t>
+      "tags":"\${expense.tag}",<#t>
+      <#if expense.convertedAmount != 0>
+      "amountUSD":\${expense.convertedAmount / 100},<#t>
+      <#elseif expense.modifiedAmount != 0>
+      "amountUSD": \${expense.modifiedAmount / 100},<#t>
+      <#else>
+      "amountUSD": \${expense.amount / 100},<#t>
+      </#if>
+      "expenseReport": "\${reportName}",<#t>
+      "reimbursed": "\${expense.reimbursable?string}",<#t>
+      "budgeted": "\${reportName?contains('Budgeted')?string}"},<#t>
   </#list>
 </#list>
 ]<#t>
