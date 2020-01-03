@@ -3,10 +3,13 @@ function getExpensifyTemplate() {
 <#-- See this page for more info on how this works: -->
 <#-- https://integrations.expensify.com/Integration-Server/doc/export_report_template.html -->
 [<#t>
-<#list reports?take_while(report ->
-  (report.reportName != "Duplicates and Unaccounted For - 2017" ||
-   report.reportName != "Duplicates and Unaccounted Fors - 2018" ||
-   report.policyName == "Carlos Nunez")) as report>
+<#list reports as report>
+  <#-- double ampersands doesn't seem to work when using take_while. -->
+  <#if (report.reportName?contains("Unaccounted") ||
+        report.policyName != "Carlos Nunez" ||
+        report.reportName?contains("Lifion"))>
+    <#continue>
+  </#if>
   <#list report.transactionList?take_while(expense ->
     (expense.amount != 0 || expense.convertedAmount != 0 || expense.modifiedAmount != 0))
   as expense>

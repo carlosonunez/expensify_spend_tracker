@@ -13,6 +13,7 @@ load clasp_helper
   {
     amountUSD: 5.4,
     dateIncurred: '2018-12-08',
+    yearIncurred: '2018',
     merchant: 'Apple',
     category: 'Mobile',
     tags: '$TEST_CREDIT_CARD_TAG'
