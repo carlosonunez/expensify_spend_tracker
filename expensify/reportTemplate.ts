@@ -10,6 +10,7 @@ function getExpensifyTemplate() {
         report.reportName?contains("Lifion"))>
     <#continue>
   </#if>
+  <#assign reportName = report.reportName>
   <#list report.transactionList?take_while(expense ->
     (expense.amount != 0 || expense.convertedAmount != 0 || expense.modifiedAmount != 0))
   as expense>
@@ -22,12 +23,13 @@ function getExpensifyTemplate() {
     "category":"\${expense.category}",<#t>
     "tags":"\${expense.tag}",<#t>
     <#if expense.convertedAmount != 0>
-    "amountUSD":\${expense.convertedAmount / 100}},<#t>
+    "amountUSD":\${expense.convertedAmount / 100},<#t>
     <#elseif expense.modifiedAmount != 0>
-    "amountUSD": \${expense.modifiedAmount / 100}},<#t>
+    "amountUSD": \${expense.modifiedAmount / 100},<#t>
     <#else>
-    "amountUSD": \${expense.amount / 100}},<#t>
+    "amountUSD": \${expense.amount / 100},<#t>
     </#if>
+    "expenseReport": "\${reportName}"},<#t>
   </#list>
 </#list>
 ]<#t>

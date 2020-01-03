@@ -4,7 +4,13 @@ function getExpenseYear(dateString) {
 }
 
 function getExpensifySheetHeaders() {
-  return [[ 'Date Incurred', 'Year', 'Merchant', 'Category', 'Card', 'Amount' ]]
+  return [[ 'Date Incurred',
+            'Year',
+            'Merchant',
+            'Category',
+            'Card',
+            'Amount',
+            'Expense Report']]
 }
 
 function getExpensifySheetStartingColumn() {
@@ -49,11 +55,12 @@ function addExpense(expense, row) {
   var range = getExpensifySheet().getRange(rangeString)
   var array = [[
     expense.dateIncurred,
-    expense.yearIncurred,
+    getExpenseYear(expense.dateIncurred),
     expense.merchant,
     expense.category,
     getCreditCardFromTag(expense.tags),
-    expense.amountUSD
+    expense.amountUSD,
+    expense.expenseReport
   ]]
   range.setValues(array)
 }
