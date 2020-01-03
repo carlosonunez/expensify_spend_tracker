@@ -55,7 +55,7 @@ function addExpense(expense, row) {
 
 
 function writeHeader() {
-  var headers = getHeaders()
+  var headers = getExpensifySheetHeaders()
   var range = getExpensifySheet().getRange(generateExpensifySheetRange(1,1))
   range.setValues(headers)
   range.setFontWeight("bold")
