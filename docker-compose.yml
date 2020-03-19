@@ -8,6 +8,12 @@ services:
     volumes:
       - $PWD:/root:delegated
     entrypoint: clasp
+  initialize-clasp:
+    extends: clasp
+    entrypoint: sh -c scripts/initialize_clasp.sh
+  get-script-id:
+    extends: clasp
+    entrypoint: sh scripts/get_script_id.sh
   login:
     extends: clasp
     command:

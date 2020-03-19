@@ -5,12 +5,24 @@ as reported by Expensify.
 
 # How to use
 
-1. Create `.env` from `.env.example` and fill out the values therein.
 2. Follow [these](https://github.com/google/clasp/blob/master/docs/run.md) instructions for
    creating a Google Cloud project for `clasp`. This will let you run unit tests with
    `clasp run`.
-3. Login: `docker-compose run --rm login`
-4. Create a script: `docker-compose run --rm create`
+
+   Take note of your project's auto-generated name and project number.
+3. Create a new Google Sheet by visiting `https://sheets.new` from your browser.
+   Log into your Google account when prompted.
+4. Next, create a new script by clicking on "Tools", then "Script Editor." Click on
+   "Untitled Project" and give it a name.
+5. Next, click on "Resources" then "Cloud Platform Project". Paste the project number
+   you saved from step 2, then click "Set Project", then click "Close."
+6. Get the script's ID. Copy the URL in the address bar then run this command and paste it
+   to the end, like this: `docker-compose run --rm get-script-id https://script.google.com/...`
+7. Create `.env` from `.env.example` and fill out the values therein. This is where
+   you use the script ID obtained from step [6].
+8. Initialize clasp: `docker-compose run --rm initialize-clasp`
+9. Login: `docker-compose run --rm login`
+10. Create a script: `docker-compose run --rm create`
 
 # Adding new functions
 
