@@ -3,7 +3,7 @@ function deleteSheet1IfPresent() {
   var sheet1Sheet = activeSheet.getSheetByName('Sheet1')
   if ( sheet1Sheet != null ) {
     console.log("Sheet1 found; deleting.")
-    sheet1Sheet.deleteSheet()
+    SpreadsheetApp.getActive().deleteSheet(sheet1Sheet);
   }
 }
 
