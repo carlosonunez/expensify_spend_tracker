@@ -22,7 +22,26 @@ as reported by Expensify.
    you use the script ID obtained from step [6].
 8. Initialize clasp: `docker-compose run --rm initialize-clasp`
 9. Login: `docker-compose run --rm login`
-10. Create a script: `docker-compose run --rm create`
+10. Configure the script so that it uses stuff from your `.env`: `docker-compose run --rm configure`
+11. Ensure that everything's working: `docker-compose run --rm tests`
+
+    The results should look like the below:
+
+    ```sh
+    $: docker-compose run --rm tests
+    1..11
+    ok 1 Our Expensify API works
+    ok 2 requestJobDescriptions for Expensify API are generated correctly (w/o inputs)
+    ok 3 requestJobDescriptions for Expensify API are generated correctly (with inputs)
+    ok 4 We can issue API requests to Expensify
+    ok 5 Expensify creates a file with all of the expenses from a given start date
+    ok 6 Report JSON can be fetched and is correct
+    ok 7 Fetches credit card from v1 tagging format
+    ok 8 Fetches credit card from v2 tagging format
+    ok 9 Shows no card data when format is invalid
+    ok 10 We get the right range
+    ok 11 We get the right year
+    ```
 
 # Adding new functions
 
