@@ -11,6 +11,16 @@ function getExpensifyTemplate() {
     <#continue>
   </#if>
   <#assign reportName = report.reportName>
+  <#if addHeader == true>
+   {"dateIncurred":"none",<#t>
+    "merchant":"none",<#t>
+    "category":"none",<#t>
+    "amountUSD":"none",<#t>
+    "tags":"none",<#t>
+    "expenseReport":"header_break",<#t>
+    "reimbursed":"none",<#t>
+    "budgeted":"none"},<#t>
+  </#if>
   <#list report.transactionList?take_while(expense ->
     (expense.amount != 0 || expense.convertedAmount != 0 || expense.modifiedAmount != 0))
   as expense>
