@@ -8,11 +8,13 @@ function deleteSheet1IfPresent() {
 }
 
 function onOpen() {
+  today = (new Date()).toISOString().substring(0,10)
+
   showExpensifyDataToast()
   clearExpensifySheet()
   deleteSheet1IfPresent()
   writeHeader()
-  getExpensesFromExpensify("2016-01-01").forEach(addExpense)
+  getExpensesFromExpensify("2016-01-01", today).forEach(addExpense)
   sortExpensesByDate()
   clearExpensifyDataToast()
 }

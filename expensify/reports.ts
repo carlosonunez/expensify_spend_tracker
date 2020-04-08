@@ -15,8 +15,8 @@ function fixExpensifyExpenses(expenses) {
     .replace(/},]$/gi, '}]')
 }
 
-function getExpensesFromExpensify(startDate, limit = 0, debug = false) {
-  var expenseReportName = getExpensifyReportsFileName(startDate, limit)
+function getExpensesFromExpensify(startDate, endDate, limit = 0, debug = false) {
+  var expenseReportName = getExpensifyReportsFileName(startDate, endDate, limit)
   console.log("Filename generated: " + expenseReportName)
   var additionalParameters = {
     "fileName": expenseReportName
@@ -37,11 +37,14 @@ function debugGetExpensesFromExpensify() {
 
 // This function can take several minutes to run given the # of expenses in
 // each report.
-function getExpensifyReportsFileName(startDate, limit = 0) {
+function getExpensifyReportsFileName(startDate, endDate, limit = 0) {
   var job = {
     "type": "combinedReportData",
     "reportState": "APPROVED,REIMBURSED,SUBMITTED,ARCHIVED",
     "filters": { "startDate": startDate }
+  }
+  if ( endDate != null ) {
+    job["filters"]["endDate"] = endDate
   }
   if (limit > 0) {
     job.limit = limit
