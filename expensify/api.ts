@@ -1,43 +1,35 @@
-function runExpensifyFunction(jobJson, jobType = "get", outputSettings = {},
-  onReceive = false, onFinish = {}, template = "", additionalParams = {}) { var userId = getProperty("expensify_api_username") var secret = getProperty("expensify_api_secret_key")
-  var url = getProperty("expensify_integrations_url")
-  var jobDescription = generateRequestJobDescription(jobType,
-    userId, secret, jobJson, outputSettings, onReceive, onFinish, additionalParams)
-  var payload = `requestJobDescription=${JSON.stringify(jobDescription)}`
-  if (template != "") {
-    payload = `${payload}&template=${encodeURI(template)}`
+function fetchExpenses(start_date = "2016-01-01", end_date, limit = 0) {
+  var apiKey = getProperty("expensify_api_key")
+  var url = getProperty("expensify_api_url") + "?start_date=" + start_date + "&end_date=" + end_date + "&types=open,processing,archived"
+  var options = {
+    "method": "GET",
+    "headers": {
+      "X-API-Key": apiKey
+    }
   }
-  var options = { 'method': 'POST','payload': payload }
-  console.log("POST to " + url + ", options: " + JSON.stringify(options))
+  Logger.log("Getting receipts from " + url)
   var response = UrlFetchApp.fetch(url, options)
   if (response.getResponseCode() != 200) {
     return showError("Expensify API call failed: " + response.getContentText())
   }
-  return response.getContentText()
+  var data = JSON.parse(response)
+  var expenses = JSON.parse(data.message)
+  Logger.log(expenses.length + " receipts found.")
+  var valid_expenses = []
+  expenses.forEach(expense => {
+    if isValidExpense(expense) {
+      valid_expenses.push(expense)
+    }
+    else {
+      Logger.log("Skipping receipt w/o a report: " + expense.receiptID + " -> " + expense.merchant)
+    }
+  })
+  return valid_expenses
 }
 
-function generateRequestJobDescription(jobType, userId, secret,
-  input = {}, output = {}, onReceive = false, onFinish = {},
-  additionalParams = {}) {
-  var jobDescription = {
-    "type": jobType,
-    "credentials": {
-      "partnerUserID": userId,
-      "partnerUserSecret": secret
-    },
-    "inputSettings": input,
-    "outputSettings": output,
-    "onFinish": onFinish
-  };
-  if (onReceive) {
-    jobDescription.onReceive = { "immediateResponse":["returnRandomFileName"] }
-  }
-  for (const property in additionalParams) {
-    jobDescription[property] = additionalParams[property]
-  }
-  return jobDescription;
-}
-
-function tellExpensifyToSayHi() {
-  return "Your Expensify scripts say 'Hi!'";
+function isValidExpense(expense) {
+  result = expense.reportName != "NOT_FOUND" &&
+    expense.merchant != "(none)" &&
+    expense.reportName.indexOf("Contino") == -1
+  return result
 }

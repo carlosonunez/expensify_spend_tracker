@@ -3,7 +3,7 @@ function showError(message) {
     alert("message")
   }
   catch {
-    console.log("message")
+    Logger.log("message")
   }
   return null
 }

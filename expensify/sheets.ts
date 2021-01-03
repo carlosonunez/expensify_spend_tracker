@@ -12,7 +12,8 @@ function getExpensifySheetHeaders() {
             'Amount',
             'Expense Report',
             'Reimbursed?',
-            'Budgeted?']]
+            'Budgeted?',
+            'Receipt ID']]
 }
 
 function getExpensifySheetStartingColumn() {
@@ -31,7 +32,7 @@ function generateExpensifySheetRange(start, end) {
 function getExpensifySheet() {
   var expensesSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Expensify Data")
   if (expensesSheet === null) {
-    console.log("Creating 'Expensify Data' spreadsheet")
+    Logger.log("Creating 'Expensify Data' spreadsheet")
     var expensesSheet = SpreadsheetApp.getActiveSpreadsheet().insertSheet("Expensify Data")
   }
   return expensesSheet
@@ -55,16 +56,21 @@ function clearExpensifySheet() {
 function addExpense(expense, row) {
   var rangeString = generateExpensifySheetRange(row+2, row+2)
   var range = getExpensifySheet().getRange(rangeString)
+  var tag = getCreditCardFromTag(expense.tag)
+  if tag == "NO_CARD" {
+    Logger.log("Expense " + expense.receiptID + " -> " + expense.merchant + " doesn't have a card!")
+  }
   var array = [[
-    expense.dateIncurred,
-    getExpenseYear(expense.dateIncurred),
+    expense.created,
+    getExpenseYear(expense.created),
     expense.merchant,
     expense.category,
-    getCreditCardFromTag(expense.tags),
-    expense.amountUSD,
-    expense.expenseReport,
-    expense.reimbursed,
-    expense.budgeted
+    getCreditCardFromTag(expense.tag),
+    parseFloat(expense.amount_dollars),
+    expense.reportName,
+    expense.reimbursable,
+    expense.budgeted,
+    parseInt(expense.receiptID)
   ]]
   range.setValues(array)
 }
